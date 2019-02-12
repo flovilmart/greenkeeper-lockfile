@@ -51,7 +51,10 @@ module.exports = function update () {
     return console.error('greenkeeper-lockfile already has a commit on this branch')
   }
 
-  const ignores = getIgnores()
+  let ignores = getIgnores()
+  if (process.env.GK_IGNORES) {
+    ignores = ignores.concat(process.env.GK_IGNORES.split(','))
+  }
   const allPackageFiles = fg.sync('./**/package.json', {ignore: ignores})
 
   // make sure that we have a clean working tree
